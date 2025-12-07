@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elevated Product Slider</title>
+    <style>
+        /* --- RESET & BASIC SETUP --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+
+        body {
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden; 
+        }
+
+        /* --- CONTAINER SLIDER --- */
+        .carousel-wrapper {
+            width: 100%;
+            max-width: 480px; 
+            position: relative; /* PENTING: Untuk memposisikan panah */
+        }
+
+        .carousel-container {
+            display: flex;
+            overflow-x: auto;
+            gap: 0px; 
+            
+            /* Padding agar kartu pertama/terakhir bisa ke tengah */
+            padding: 40px 50% 40px 50%; 
+            
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            scroll-behavior: smooth; /* Memungkinkan JS scroll smoothly */
+        }
+
+        /* Sembunyikan Scrollbar */
+        .carousel-container::-webkit-scrollbar { display: none; }
+
+        /* --- KARTU PRODUK --- */
+        .product-card {
+            flex: 0 0 auto;
+            width: 260px; 
+            background: white;
+            border-radius: 20px;
+            
+            position: relative;
+            left: -130px;
+            
+            scroll-snap-align: center;
+            
+            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), 
+                        opacity 0.4s ease, 
+                        box-shadow 0.4s ease;
+            
+            /* State Awal (Tidak Aktif/Samping) */
+            transform: scale(0.85); 
+            opacity: 0.6; 
+            box-shadow: 0 5px 10px rgba(0,0,0,0.05);
+            
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- STATE AKTIF (TENGAH) --- */
+        .product-card.active {
+            transform: scale(1.05); 
+            opacity: 1; 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15); 
+            z-index: 10; 
+        }
+
+        /* --- ISI KARTU --- */
+        .card-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .card-content {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            text-align: center; 
+        }
+
+        .product-name {
+            /* PERUBAHAN 1: Mengecilkan font size */
+            font-size: 1rem; 
+            font-weight: 700;
+            color: #111;
+            /* Tambahkan overflow handling untuk nama produk yang panjang */
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .price-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .original-price { text-decoration: line-through; color: #aaa; font-size: 0.9rem; }
+        .discount-price { color: #131046; font-weight: 700; font-size: 1.1rem; }
+
+        .rating { color: #555; font-size: 0.9rem; margin-bottom: 10px; }
+        .star { color: #fbbf24; }
+
+        /* Button Link */
+        .btn-detail {
+            background: linear-gradient(135deg, #2563eb, #1e40af);
+            color: white;
+            text-decoration: none;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: transform 0.2s;
+            display: block;
+        }
+        
+        .btn-detail:active { transform: scale(0.95); }
+
+        /* --- TOMBOL PANAH MINIMALIST --- */
+        .nav-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.85); /* Semi transparan */
+            border: 1px solid #ddd;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 20; /* Harus di atas kartu */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            color: #333;
+            font-size: 1.2rem;
+            font-weight: 900;
+            transition: background 0.2s, opacity 0.3s;
+        }
+
+        .nav-arrow:hover {
+            background: white;
+        }
+
+        .nav-arrow.left {
+            left: 5px;
+        }
+
+        .nav-arrow.right {
+            right: 5px;
+        }
+
+        /* Sembunyikan panah di mobile untuk mendorong swipe */
+        @media (max-width: 480px) {
+            .nav-arrow {
+                display: none;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="carousel-wrapper">
+        <div class="nav-arrow left" id="prevBtn">❮</div>
+        <div class="nav-arrow right" id="nextBtn">❯</div>
+
+        <div class="carousel-container" id="slider">
+            
+            <div class="product-card">
+                <img src="https://cdn.lynkid.my.id/draft-products/07-12-2025/1765081575319_9701344.png" alt="Sepatu" class="card-image">
+                <div class="card-content">
+                    <div class="product-name">45 Minutes Private Mentoring 1 on 1 Session</div>
+                    <div class="price-container">
+                        <span class="original-price">Rp 350.000</span>
+                        <span class="discount-price">Rp 159.000</span>
+                    </div>
+                    <div class="rating"><span class="star">★★★★★</span> (4.9)</div>
+                    <a href="https://lynk.id/ajengwahys/9d22v10q0zd0" class="btn-detail">Lihat Detail ￫</a>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="https://cdn.lynkid.my.id/draft-products/07-12-2025/1765081621757_8916155.png" alt="Jam" class="card-image">
+                <div class="card-content">
+                    <div class="product-name">3x Gmeet Private Mentoring Session</div>
+                    <div class="price-container">
+                        <span class="original-price">Rp 750.000</span>
+                        <span class="discount-price">Rp 499.900</span>
+                    </div>
+                    <div class="rating"><span class="star">★★★★★</span> (4.9)</div>
+                    <a href="https://lynk.id/ajengwahys/y9jjk36e558m" class="btn-detail">Lihat Detail ￫</a>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="https://cdn.lynkid.my.id/draft-products/07-12-2025/1765081672956_6908353.png" alt="Headphone" class="card-image">
+                <div class="card-content">
+                    <div class="product-name">Review Portofolio + Template Personalize Proposal</div>
+                    <div class="price-container">
+                        <span class="original-price">Rp 129.000</span>
+                        <span class="discount-price">Rp 34.900</span>
+                    </div>
+                    <div class="rating"><span class="star">★★★★★</span> (5.0)</div>
+                    <a href="https://lynk.id/ajengwahys/9x7799jjj1gn" class="btn-detail">Lihat Detail ￫</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        const slider = document.getElementById('slider');
+        const cards = document.querySelectorAll('.product-card');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const cardWidth = 260; // Sesuai lebar kartu di CSS
+
+        // --- Logic JS untuk Elevation (Intersection Observer) ---
+        const observerOptions = {
+            root: slider,
+            threshold: 0.6
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                } else {
+                    entry.target.classList.remove('active');
+                }
+            });
+        }, observerOptions);
+
+        cards.forEach(card => {
+            observer.observe(card);
+        });
+
+        // --- Logic JS untuk Tombol Panah (Navigation) ---
+        nextBtn.addEventListener('click', () => {
+            // Scroll ke kanan sebesar lebar satu kartu
+            slider.scrollBy({
+                left: cardWidth + 0, // 0 karena gap 0
+                behavior: 'smooth'
+            });
+        });
+
+        prevBtn.addEventListener('click', () => {
+            // Scroll ke kiri sebesar lebar satu kartu
+            slider.scrollBy({
+                left: -(cardWidth + 0),
+                behavior: 'smooth'
+            });
+        });
+    </script>
+
+</body>
+</html>
