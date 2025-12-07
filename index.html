@@ -14,11 +14,11 @@
         }
 
         body {
-            /* PERBAIKAN: Background transparan dan hilangkan centering global yang memotong */
             background-color: transparent; 
             margin: 0;
             padding: 0;
-            /* HILANGKAN: display: flex; justify-content: center; align-items: center; min-height: 100vh; */
+            /* PERBAIKAN: Tambahkan padding bawah di body untuk mencegah pemotongan konten */
+            padding-bottom: 20px; 
         }
 
         /* --- CONTAINER SLIDER --- */
@@ -51,12 +51,14 @@
         /* --- KARTU PRODUK --- */
         .product-card {
             flex: 0 0 auto;
-            width: 260px; 
+            /* PERBAIKAN 2: Perkecil lebar kartu */
+            width: 230px; 
             background: white;
             border-radius: 20px;
             
             position: relative;
-            left: -130px;
+            /* Sesuaikan left: setengah dari lebar kartu baru (230/2 = 115) */
+            left: -115px; 
             
             scroll-snap-align: center;
             
@@ -85,20 +87,21 @@
         /* --- ISI KARTU --- */
         .card-image {
             width: 100%;
-            height: 200px;
+            /* PERBAIKAN 2: Perkecil tinggi gambar */
+            height: 180px; 
             object-fit: cover;
         }
 
         .card-content {
-            padding: 20px;
+            padding: 15px; /* Sedikit perkecil padding konten */
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 6px; /* Sedikit perkecil gap */
             text-align: center; 
         }
 
         .product-name {
-            font-size: 1rem; 
+            font-size: 0.95rem; /* Sedikit perkecil font */
             font-weight: 700;
             color: #111;
             white-space: nowrap;
@@ -109,47 +112,47 @@
         .price-container {
             display: flex;
             justify-content: center;
-            gap: 10px;
+            gap: 8px;
             align-items: center;
         }
 
         .original-price { 
             text-decoration: line-through; 
             color: #aaa; 
-            font-size: 0.9rem; 
+            font-size: 0.85rem; 
         }
         
         .discount-price { 
             color: #131046; 
             font-weight: 700; 
-            font-size: 1.1rem; 
+            font-size: 1rem; 
         }
 
         .rating { 
             color: #555; 
-            font-size: 0.9rem; 
-            margin-bottom: 10px; 
+            font-size: 0.85rem; 
+            margin-bottom: 8px; 
         }
         
         .star { 
             color: #fbbf24; 
         }
 
-        /* --- Button Link --- */
+        /* --- Button Link (Active State sudah termasuk) --- */
         .btn-detail {
             background: linear-gradient(135deg, #2563eb, #1e40af);
             color: white;
             text-decoration: none;
-            padding: 12px;
-            border-radius: 12px;
+            padding: 10px; /* Sedikit perkecil padding tombol */
+            border-radius: 10px; 
             font-weight: 600;
+            font-size: 0.95rem; /* Sedikit perkecil font tombol */
             
             transition: transform 0.2s, box-shadow 0.2s, background 0.2s; 
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
             display: block;
         }
         
-        /* Active State (Efek Ditekan) */
         .btn-detail:active { 
             transform: scale(0.98); 
             background: #1e40af; 
@@ -163,8 +166,8 @@
             transform: translateY(-50%);
             background: rgba(255, 255, 255, 0.85); 
             border: 1px solid #ddd;
-            width: 35px;
-            height: 35px;
+            width: 30px; /* Perkecil ukuran panah */
+            height: 30px;
             border-radius: 50%;
             display: flex;
             justify-content: center;
@@ -173,7 +176,7 @@
             z-index: 20; 
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             color: #333;
-            font-size: 1.2rem;
+            font-size: 1rem; /* Perkecil font panah */
             font-weight: 900;
             transition: background 0.2s, opacity 0.3s;
         }
@@ -190,12 +193,12 @@
             right: 5px;
         }
 
-        /* PERBAIKAN: Hapus @media untuk tombol panah agar tetap terlihat di mobile/frame kecil */
-        /* @media (max-width: 480px) {
+        /* PERBAIKAN 1: Sembunyikan panah di mobile */
+        @media (max-width: 480px) {
             .nav-arrow {
                 display: none;
             }
-        } */
+        }
 
     </style>
 </head>
@@ -252,9 +255,11 @@
     <script>
         const slider = document.getElementById('slider');
         const cards = document.querySelectorAll('.product-card');
+        // PERBAIKAN JS: Sesuaikan lebar kartu di JS
+        const cardWidth = 230; 
+
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
-        const cardWidth = 260; 
 
         // --- Logic JS untuk Elevation (Intersection Observer) ---
         const observerOptions = {
@@ -278,7 +283,6 @@
 
         // --- Logic JS untuk Tombol Panah (Navigation) ---
         nextBtn.addEventListener('click', () => {
-            // Scroll ke kanan sebesar lebar satu kartu
             slider.scrollBy({
                 left: cardWidth, 
                 behavior: 'smooth'
@@ -286,7 +290,6 @@
         });
 
         prevBtn.addEventListener('click', () => {
-            // Scroll ke kiri sebesar lebar satu kartu
             slider.scrollBy({
                 left: -cardWidth,
                 behavior: 'smooth'
