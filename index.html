@@ -14,17 +14,18 @@
         }
 
         body {
-            background-color: transparent; /* Ubah agar background frame bisa terlihat */
+            /* PERBAIKAN: Background transparan dan hilangkan centering global yang memotong */
+            background-color: transparent; 
+            margin: 0;
+            padding: 0;
             /* HILANGKAN: display: flex; justify-content: center; align-items: center; min-height: 100vh; */
-            /* HILANGKAN: overflow: hidden; */
         }
 
         /* --- CONTAINER SLIDER --- */
         .carousel-wrapper {
             width: 100%;
-            /* HILANGKAN: max-width: 480px; agar mengikuti lebar frame/device */
             position: relative; 
-            padding-top: 10px; /* Tambahkan padding sedikit di atas container */
+            padding-top: 10px; 
             padding-bottom: 20px;
         }
 
@@ -33,8 +34,8 @@
             overflow-x: auto;
             gap: 0px; 
             
-            /* Padding agar kartu pertama/terakhir bisa ke tengah */
-            padding: 0 50%; /* Hapus padding vertical (atas & bawah) di sini, pindahkan ke wrapper */
+            /* Padding horizontal agar kartu pertama/terakhir bisa ke tengah */
+            padding: 0 50%; 
             
             scroll-snap-type: x mandatory;
             -webkit-overflow-scrolling: touch;
@@ -189,12 +190,12 @@
             right: 5px;
         }
 
-        /* Sembunyikan panah di mobile */
-        @media (max-width: 480px) {
+        /* PERBAIKAN: Hapus @media untuk tombol panah agar tetap terlihat di mobile/frame kecil */
+        /* @media (max-width: 480px) {
             .nav-arrow {
                 display: none;
             }
-        }
+        } */
 
     </style>
 </head>
